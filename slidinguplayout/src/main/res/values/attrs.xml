@@ -2,5 +2,6 @@
 <resources>
     <declare-styleable name="SlidingUpLayout">
        <attr name="barHeight" format="dimension" />
+       <attr name="overlapBar" format="boolean" />
    </declare-styleable>
 </resources>

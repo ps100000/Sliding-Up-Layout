@@ -9,8 +9,9 @@ import android.view.View
 import android.view.animation.AccelerateInterpolator
 import android.widget.FrameLayout
 import android.widget.LinearLayout
-import android.widget.RelativeLayout
 import java.lang.Exception
+
+
 
 
 
@@ -28,6 +29,7 @@ class SlidingUpLayout(context: Context, attrs: AttributeSet) : LinearLayout(cont
     private var changelistener: OnStateChangeListener? = null
     private var draglistener: OnDragListener? = null
 
+    private var overlapBar: Boolean = false
     private val animationUpdater: ValueAnimator.AnimatorUpdateListener = ValueAnimator.AnimatorUpdateListener{
         val value = it.animatedValue as Int
         top!!.layoutParams.height = value
@@ -47,7 +49,22 @@ class SlidingUpLayout(context: Context, attrs: AttributeSet) : LinearLayout(cont
     }
 
     init {
-        barHeight = attrs.getAttributeIntValue("app","barHeight", TypedValue.applyDimension( TypedValue.COMPLEX_UNIT_DIP, 60f, resources.displayMetrics).toInt())
+        barHeight = TypedValue.applyDimension( TypedValue.COMPLEX_UNIT_DIP, 60f, resources.displayMetrics).toInt()
+        for (i in 0 until attrs.attributeCount) {
+            when (attrs.getAttributeName(i)) {
+                "barHeight" ->{
+                    var v = attrs.getAttributeValue(i)
+                    if (v.endsWith("dip")){
+                        v = v.substring(0, v.lastIndexOf("dip"))
+                        barHeight = TypedValue.applyDimension( TypedValue.COMPLEX_UNIT_DIP, v.toFloat(), resources.displayMetrics).toInt()
+                    }else{
+                        throw Exception("barHeight not in dip")
+                    }
+                }
+                "overlapBar" ->
+                    overlapBar = attrs.getAttributeBooleanValue(i, false)
+            }
+        }
         super.setOrientation(VERTICAL)
     }
 
@@ -76,6 +93,10 @@ class SlidingUpLayout(context: Context, attrs: AttributeSet) : LinearLayout(cont
         }else{
             minHeight = 0
         }
+        if(overlapBar){
+            minHeight += barHeight
+        }
+
     }
 
     override fun onFinishInflate() {
@@ -90,18 +111,21 @@ class SlidingUpLayout(context: Context, attrs: AttributeSet) : LinearLayout(cont
             if ((top as FrameLayout).childCount > 1){
                 throw Exception("first child should only have one child: The toplayout")
             }
-            if (getChildAt(1).layoutParams.height > 0){
-                minHeight = height - getChildAt(1).layoutParams.height
-            }else{
-                minHeight = 0
-            }
         }
     }
 
     override fun onLayout(changed: Boolean, l: Int, t: Int, r: Int, b: Int) {
         super.onLayout(changed, l, t, r, b)
         if ((maxHeight == 0) and (measuredHeight > 0)) {
-            maxHeight = measuredHeight - barHeight
+            if (overlapBar){
+                maxHeight = measuredHeight
+                val mp = getChildAt(1).layoutParams as MarginLayoutParams
+                mp.topMargin = -barHeight
+                getChildAt(1).layoutParams = mp
+                getChildAt(1).requestLayout()
+            }else {
+                maxHeight = measuredHeight - barHeight
+            }
             if(top != null) {
                 top?.layoutParams?.height = maxHeight
                 top?.requestLayout()
@@ -132,8 +156,7 @@ class SlidingUpLayout(context: Context, attrs: AttributeSet) : LinearLayout(cont
         throw Exception("invalid number of children")
     }
 
-    override fun onTouchEvent(event: MotionEvent?): Boolean {
-        super.onTouchEvent(event)
+    override fun dispatchTouchEvent(event: MotionEvent?): Boolean {
         if (event != null && top != null) {
             when (event.actionMasked) {
                 MotionEvent.ACTION_DOWN -> {
@@ -202,9 +225,12 @@ class SlidingUpLayout(context: Context, attrs: AttributeSet) : LinearLayout(cont
                 }
             }
         }
-
+        if (!moving) {
+            super.dispatchTouchEvent(event)
+        }
         return true
     }
+
 
     fun setState(state: State){
         changelistener?.onChange(state)
