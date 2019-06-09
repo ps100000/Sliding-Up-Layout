@@ -9,6 +9,7 @@ import android.view.View
 import android.view.animation.AccelerateInterpolator
 import android.widget.FrameLayout
 import android.widget.LinearLayout
+import android.widget.RelativeLayout
 import java.lang.Exception
 
 
@@ -24,33 +25,9 @@ class SlidingUpLayout(context: Context, attrs: AttributeSet) : LinearLayout(cont
     private var movingUp = true
     private var top: View? = null
 
-    enum class State(state: Int){
-        UP(1),
-        DOWN(2);
-
-        override fun toString(): String {
-            return  if (this == UP){
-                "UP"
-            }else{
-                "DOWN"
-            }
-        }
-    }
-
-    override fun setOrientation(orientation: Int) {
-        super.setOrientation(VERTICAL)
-    }
-
-    interface OnStateChangeListener {
-        fun onChange(state: State)
-    }
-
-    interface OnDragListener {
-        fun onDrag(pos: Float)
-    }
-
     private var changelistener: OnStateChangeListener? = null
     private var draglistener: OnDragListener? = null
+
     private val animationUpdater: ValueAnimator.AnimatorUpdateListener = ValueAnimator.AnimatorUpdateListener{
         val value = it.animatedValue as Int
         top!!.layoutParams.height = value
@@ -61,8 +38,34 @@ class SlidingUpLayout(context: Context, attrs: AttributeSet) : LinearLayout(cont
         draglistener?.onDrag((value - minHeight) / (maxHeight - minHeight).toFloat())
     }
 
+    interface OnStateChangeListener {
+        fun onChange(state: State)
+    }
+
+    interface OnDragListener {
+        fun onDrag(pos: Float)
+    }
+
     init {
         barHeight = attrs.getAttributeIntValue("app","barHeight", TypedValue.applyDimension( TypedValue.COMPLEX_UNIT_DIP, 60f, resources.displayMetrics).toInt())
+        super.setOrientation(VERTICAL)
+    }
+
+    enum class State(state: Int){
+
+        UP(1),
+        DOWN(2);
+
+        override fun toString(): String {
+            return  if (this == UP){
+                "UP"
+            }else{
+                "DOWN"
+            }
+        }
+
+    }
+    override fun setOrientation(orientation: Int) {
         super.setOrientation(VERTICAL)
     }
 
@@ -73,9 +76,6 @@ class SlidingUpLayout(context: Context, attrs: AttributeSet) : LinearLayout(cont
         }else{
             minHeight = 0
         }
-        if(height - barHeight > 0) {
-            maxHeight = height - barHeight
-        }
     }
 
     override fun onFinishInflate() {
@@ -84,6 +84,12 @@ class SlidingUpLayout(context: Context, attrs: AttributeSet) : LinearLayout(cont
             throw Exception("invalid number of children")
         }else{
             top = getChildAt(0)
+            if(top !is FrameLayout){
+                throw Exception("first child needs to be a FrameLayout surrounding your toplayout")
+            }
+            if ((top as FrameLayout).childCount > 1){
+                throw Exception("first child should only have one child: The toplayout")
+            }
             if (getChildAt(1).layoutParams.height > 0){
                 minHeight = height - getChildAt(1).layoutParams.height
             }else{
@@ -96,8 +102,12 @@ class SlidingUpLayout(context: Context, attrs: AttributeSet) : LinearLayout(cont
         super.onLayout(changed, l, t, r, b)
         if ((maxHeight == 0) and (measuredHeight > 0)) {
             maxHeight = measuredHeight - barHeight
-            top?.layoutParams?.height = maxHeight
-            top?.requestLayout()
+            if(top != null) {
+                top?.layoutParams?.height = maxHeight
+                top?.requestLayout()
+                (top as FrameLayout).getChildAt(0).layoutParams.height = maxHeight
+                (top as FrameLayout).getChildAt(0).requestLayout()
+            }
         }
 
     }
