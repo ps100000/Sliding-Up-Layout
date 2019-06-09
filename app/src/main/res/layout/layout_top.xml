@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:app="http://schemas.android.com/apk/res-auto" xmlns:tools="http://schemas.android.com/tools"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" android:overScrollMode="always"
+                android:scrollbarAlwaysDrawVerticalTrack="true" android:isScrollContainer="true">
+    <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/imageView2" android:background="#4CAF50"/>
+    <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+                      android:orientation="vertical">
+            <Button
+                    android:text="Button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" android:id="@+id/button"/>
+            <TextView
+                    android:text="  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse sit amet sollicitudin mi. Morbi lacus ipsum, aliquet eu interdum nec, feugiat sed tortor. Sed ut scelerisque ipsum. Nulla ac diam interdum urna tristique euismod eget non velit. Pellentesque vehicula mauris sit amet aliquam imperdiet. Phasellus porttitor malesuada nunc, non tristique lacus varius in. Donec faucibus nunc arcu, non vulputate nisi feugiat non. Mauris bibendum porttitor ex ut sodales. Ut eu ante viverra, pellentesque libero nec, placerat nisi.  Nam congue orci nisl, ut rutrum elit ornare quis. Donec tortor tellus, congue pretium nibh ut, accumsan gravida metus. Sed at ligula efficitur. "
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" android:id="@+id/textView3"
+                    android:layout_marginTop="0dp"/>
+            <TextView
+                    android:text="  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse sit amet sollicitudin mi. Morbi lacus ipsum, aliquet eu interdum nec, feugiat sed tortor. Sed ut scelerisque ipsum. Nulla ac diam interdum urna tristique euismod eget non velit. Pellentesque vehicula mauris sit amet aliquam imperdiet. Phasellus porttitor malesuada nunc, non tristique lacus varius in. Donec faucibus nunc arcu, non vulputate nisi feugiat non. Mauris bibendum porttitor ex ut sodales. Ut eu ante viverra, pellentesque libero nec, placerat nisi.  Nam congue orci nisl, ut rutrum elit ornare quis. Donec tortor tellus, congue pretium nibh ut, accumsan gravida metus. Sed at ligula efficitur. "
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" android:id="@+id/textView4"
+                    android:layout_marginTop="100dp"/>
+            <TextView
+                    android:text="  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse sit amet sollicitudin mi. Morbi lacus ipsum, aliquet eu interdum nec, feugiat sed tortor. Sed ut scelerisque ipsum. Nulla ac diam interdum urna tristique euismod eget non velit. Pellentesque vehicula mauris sit amet aliquam imperdiet. Phasellus porttitor malesuada nunc, non tristique lacus varius in. Donec faucibus nunc arcu, non vulputate nisi feugiat non. Mauris bibendum porttitor ex ut sodales. Ut eu ante viverra, pellentesque libero nec, placerat nisi.  Nam congue orci nisl, ut rutrum elit ornare quis. Donec tortor tellus, congue pretium nibh ut, accumsan gravida metus. Sed at ligula efficitur. "
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" android:id="@+id/textView"
+                    android:layout_marginTop="10dp"/>
+            <TextView
+                    android:text="  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse sit amet sollicitudin mi. Morbi lacus ipsum, aliquet eu interdum nec, feugiat sed tortor. Sed ut scelerisque ipsum. Nulla ac diam interdum urna tristique euismod eget non velit. Pellentesque vehicula mauris sit amet aliquam imperdiet. Phasellus porttitor malesuada nunc, non tristique lacus varius in. Donec faucibus nunc arcu, non vulputate nisi feugiat non. Mauris bibendum porttitor ex ut sodales. Ut eu ante viverra, pellentesque libero nec, placerat nisi.  Nam congue orci nisl, ut rutrum elit ornare quis. Donec tortor tellus, congue pretium nibh ut, accumsan gravida metus. Sed at ligula efficitur. "
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" android:id="@+id/textView2"
+                    android:layout_marginTop="50dp"/>
+        </LinearLayout>
+    </ScrollView>
+</RelativeLayout>
