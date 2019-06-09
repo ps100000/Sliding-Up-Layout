@@ -37,6 +37,10 @@ class SlidingUpLayout(context: Context, attrs: AttributeSet) : LinearLayout(cont
         }
     }
 
+    override fun setOrientation(orientation: Int) {
+        super.setOrientation(VERTICAL)
+    }
+
     interface OnStateChangeListener {
         fun onChange(state: State)
     }
@@ -59,6 +63,7 @@ class SlidingUpLayout(context: Context, attrs: AttributeSet) : LinearLayout(cont
 
     init {
         barHeight = attrs.getAttributeIntValue("app","barHeight", TypedValue.applyDimension( TypedValue.COMPLEX_UNIT_DIP, 60f, resources.displayMetrics).toInt())
+        super.setOrientation(VERTICAL)
     }
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
